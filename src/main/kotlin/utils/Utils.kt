@@ -1,17 +1,33 @@
 package utils
 
+import org.json.JSONArray
+import session.Session
+
 class Utils {
 
-    fun printMenuUser() {
-        println("""
+    val menu: JSONArray = JSONArray()
+    var menuString: String = """
             Que deseas hacer:
-            1) Añadir un nuevo miembro de la familia
-            2) Ver a todos los miembros
-            3) Ver el expediente de algún miembro
-            4) Cerrar Sesion
-            5) Salir
-        """.trimIndent())
+    """
+    private val actualSession: Session
+
+     constructor(session: Session) {
+         actualSession = session
+         menu.put("Añadir un nuevo miembro de la familia")
+         menu.put("Ver a todos los miembros")
+         menu.put("Ver el expediente de algún miembro")
+         menu.put("Cerrar Sesion")
+         menu.put("Salir")
+         menuString += menu.reduceIndexed { i, acc, it -> """${if(i > 1) acc else """
+             1) $it""".trimIndent() }
+            ${i+1}) $it
+        """.trimIndent() }
+     }
+
+    fun printMenuUser() {
+        println(menuString)
         println("Opcion: ")
+        getOptionMenu()
     }
 
     fun getOptionMenu() {
@@ -34,6 +50,28 @@ class Utils {
     }
 
     fun navigateAction(action: Int) {
+        when(action) {
+            1 -> addNewMember()
+            2 -> listFamily()
+            3 -> lookFile()
+            4 -> loggedOff()
+        }
+    }
 
+    fun listFamily() {
+        println("from listFamily")
+        println(actualSession.getCurrentUser())
+    }
+
+    fun addNewMember() {
+        println("from addNewMember")
+    }
+
+    fun lookFile() {
+        println("from lookFile")
+    }
+
+    fun loggedOff() {
+        actualSession.loggedOff()
     }
 }

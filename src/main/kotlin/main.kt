@@ -21,12 +21,13 @@ fun main() {
      * We create a new instance to Utils class
      */
 
-    val utils = Utils()
+    val utils = Utils(ses)
 
     println("Bienvenido ${user.getUsername()}")
     println("Miembros de la familia: ${user.getAllPets()}")
 
     utils.printMenuUser()
 
+    ses.shutdownApp()
 
 }
