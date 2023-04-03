@@ -1,0 +1,4 @@
+package pet
+
+class Pet {
+}

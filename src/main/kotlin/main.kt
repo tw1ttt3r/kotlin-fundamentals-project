@@ -1,5 +1,6 @@
 import session.Session
 import user.User
+import utils.Utils
 
 fun main() {
     /**
@@ -16,10 +17,16 @@ fun main() {
      */
     val user = User(ses.getCurrentUser())
 
+    /**
+     * We create a new instance to Utils class
+     */
+
+    val utils = Utils()
+
     println("Bienvenido ${user.getUsername()}")
     println("Miembros de la familia: ${user.getAllPets()}")
 
-
+    utils.printMenuUser()
 
 
 }
