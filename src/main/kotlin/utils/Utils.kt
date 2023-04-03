@@ -2,6 +2,7 @@ package utils
 
 import org.json.JSONArray
 import session.Session
+import user.User
 
 class Utils {
 
@@ -10,16 +11,17 @@ class Utils {
             Que deseas hacer:
     """
     private val actualSession: Session
+    private val actualUser: User
 
-     constructor(session: Session) {
+     constructor(session: Session, user: User) {
          actualSession = session
+         actualUser = user
          menu.put("Añadir un nuevo miembro de la familia")
          menu.put("Ver a todos los miembros")
          menu.put("Ver el expediente de algún miembro")
          menu.put("Cerrar Sesion")
          menu.put("Salir")
-         menuString += menu.reduceIndexed { i, acc, it -> """${if(i > 1) acc else """
-             1) $it""".trimIndent() }
+         menuString += menu.reduceIndexed { i, acc, it -> """${if(i > 1) acc else """1) $it""".trimIndent() }
             ${i+1}) $it
         """.trimIndent() }
      }

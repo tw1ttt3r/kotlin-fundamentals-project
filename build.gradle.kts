@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm") version "1.8.0"
+    application // enabling the plugin here
 }
 
 group = "org.example"
@@ -20,4 +21,8 @@ tasks.test {
 
 kotlin {
     jvmToolchain(11)
+}
+
+application {
+    mainClass.set("peek.MainKt")
 }
