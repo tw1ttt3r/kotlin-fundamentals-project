@@ -42,4 +42,4 @@ bin/
 .DS_Store
 
 ### App files ###
-!**/src/main/resources/bd.json
+/src/main/resources/

@@ -16,7 +16,7 @@ class Peek {
             /**
              * We'll recover the new account
              * and will create a new user to continue
-             * with all available actions
+             * with all available actions1
              */
             val user = User(ses.getCurrentUser())
 

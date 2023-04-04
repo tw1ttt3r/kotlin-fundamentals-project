@@ -28,6 +28,7 @@ class Session {
         } else {
             println("Creating BD!!...")
             try {
+                File("src/main/resources").mkdir()
                 val isNewFileCreated :Boolean = file.createNewFile()
                 if (isNewFileCreated) {
                     println("BD created succesfully!!!")
@@ -56,7 +57,7 @@ class Session {
         }
     }
 
-    private fun initializeBd() {
+    private fun initializeBd(): Unit {
         try {
             bd.put("users", ArrayList<JSONObject>())
             bd.put("sessionActive", getInitSessionActive())
@@ -70,7 +71,7 @@ class Session {
         return file.exists() && !file.isDirectory
     }
 
-    private fun createFile() {
+    private fun createFile(): Unit {
         try {
             PrintWriter(FileWriter(path, Charset.defaultCharset()))
                 .use { it.write(bd.toString()) }
@@ -95,7 +96,7 @@ class Session {
         bd.put("sessionActive", sessionLogged)
     }
 
-    private fun registerUser(login: Boolean = false) {
+    private fun registerUser(login: Boolean = false): Unit {
         println("Bienvenido")
         println(if (!login) "Para poder crear su cuenta proporcione un usuario y una contraseña" else "Para iniciar sesión proporcione un usuario y una contraseña")
         println("Usuario: ")
@@ -109,7 +110,7 @@ class Session {
     }
 
 
-    private fun createdNewUser(user: String, pass: String, logged: Boolean, login: Boolean) {
+    private fun createdNewUser(user: String, pass: String, logged: Boolean, login: Boolean): Unit {
         var allUsers: JSONArray = bd.getJSONArray("users")
         var newUser = JSONObject()
         if (!login) {
@@ -146,7 +147,7 @@ class Session {
 
     }
 
-    private fun updateUsers(data: JSONArray) {
+    private fun updateUsers(data: JSONArray): Unit {
         bd.put("users", data)
     }
 
@@ -154,12 +155,18 @@ class Session {
         return currentUser
     }
 
-    fun loggedOff () {
+    fun loggedOff (): Unit {
         var sessionLogged: JSONObject = bd.getJSONObject("sessionActive")
         updateSessionActive("", false)
     }
 
-    fun shutdownApp() {
+    fun shutdownApp(): Unit {
         createFile()
+    }
+
+    fun updateUserWithExternalInfo(newInfoUser: JSONObject) {
+        currentUser = newInfoUser
+        val allUsers = JSONArray(bd.get("users").toString()).filter { JSONObject(it.toString()).get("user") != currentUser.get("user") }
+        bd.put("users", JSONArray(allUsers.toString()).put(newInfoUser))
     }
 }

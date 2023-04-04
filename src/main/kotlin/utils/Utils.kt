@@ -1,6 +1,7 @@
 package utils
 
 import org.json.JSONArray
+import org.json.JSONObject
 import session.Session
 import user.User
 
@@ -21,9 +22,11 @@ class Utils {
          menu.put("Ver el expediente de algún miembro")
          menu.put("Cerrar Sesion")
          menu.put("Salir")
-         menuString += menu.reduceIndexed { i, acc, it -> """${if(i > 1) acc else """1) $it""".trimIndent() }
-            ${i+1}) $it
-        """.trimIndent() }
+         for ((i, option) in menu.withIndex()) {
+             menuString += """${i+1}) $option
+                 
+             """.trimIndent()
+         }
      }
 
     fun printMenuUser() {
@@ -61,16 +64,41 @@ class Utils {
     }
 
     fun listFamily() {
-        println("from listFamily")
-        println(actualSession.getCurrentUser())
+        actualUser.listMembers()
+        printMenuUser()
     }
 
     fun addNewMember() {
         println("from addNewMember")
+        val dataMember = actualUser.addNewMember()
+        if (dataMember == "") {
+            println("Datos no proporcionados")
+        } else {
+            actualUser.validarRegistro(dataMember)
+        }
+        val newInfoUser = actualUser.getCurrentUser()
+        actualSession.updateUserWithExternalInfo(newInfoUser)
+        printMenuUser()
     }
 
     fun lookFile() {
-        println("from lookFile")
+        if (actualUser.getAllPets() > 0) {
+            actualUser.listMembers()
+            println("Ver expediente de: ")
+            val option = readLine()!!
+            if (option == "") {
+                println("Proporcione una opción válida.")
+                lookFile()
+            } else {
+                val totPets = actualUser.getAllPets()
+                if (option.toInt() in 1 .. (totPets + 1)) {
+                    val infoPet = actualUser.getInfoPet(option.toInt() - 1)
+                    println("Información: $infoPet")
+                }
+                printMenuUser()
+            }
+        }
+        printMenuUser()
     }
 
     fun loggedOff() {
